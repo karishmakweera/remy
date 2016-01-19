@@ -6,20 +6,44 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <fstream>
+#include <iostream>
 
 #include "evaluator.hh"
 #include "configrange.hh"
 using namespace std;
+
+const int num_points = 100; /* Granularity of the generated plot */
+
+double parse_outcome(Evaluator::Outcome outcome) {
+  double norm_score = 0;
+  for ( auto &run : outcome.throughputs_delays ) {
+    printf( "===\nconfig: %s\n", run.first.str().c_str() );
+    for ( auto &x : run.second ) {
+      printf( "sender: [tp=%f, del=%f]\n", x.first / run.first.link_ppt, x.second / run.first.delay );
+      norm_score += log2( x.first / run.first.link_ppt ) - log2( x.second / run.first.delay );
+    }
+  }  
+  return norm_score;
+}
 
 int main( int argc, char *argv[] )
 {
   WhiskerTree whiskers;
   unsigned int num_senders = 2;
   double link_ppt = 1.0;
+<<<<<<< HEAD
   double delay = 100.0;
   double mean_on_duration = 5000.0;
   double mean_off_duration = 5000.0;
   double buffer_size = numeric_limits<unsigned int>::max();
+=======
+  double delay = 150.0;
+  double mean_on_duration = 1000.0;
+  double mean_off_duration = 1000.0;
+  ofstream linkspeed_out;
+  bool gen_linkspeed = false;
+>>>>>>> Enable rat-runner to repeatly run evaluation, and redirect output to gnuplot file
 
   for ( int i = 1; i < argc; i++ ) {
     string arg( argv[ i ] );
@@ -72,10 +96,10 @@ int main( int argc, char *argv[] )
         buffer_size = atoi( arg.substr( 4 ).c_str() );
       }
     }
-  }
+   }
 
   ConfigRange configuration_range;
-  configuration_range.link_ppt = Range( link_ppt,link_ppt, 0 ); /* 1 Mbps to 10 Mbps */
+  configuration_range.link_ppt = Range( link_ppt,link_ppt, 0 );
   configuration_range.rtt = Range( delay, delay, 0 ); /* ms */
   configuration_range.num_senders = Range( num_senders, num_senders, 0 );
   configuration_range.mean_on_duration = Range( mean_on_duration, mean_on_duration, 0 );
@@ -92,11 +116,10 @@ int main( int argc, char *argv[] )
       printf( "sender: [tp=%f, del=%f]\n", x.first / run.first.link_ppt, x.second / run.first.delay );
       norm_score += log2( x.first / run.first.link_ppt ) - log2( x.second / run.first.delay );
     }
+    linkspeed_out.close();
   }
-
-  printf( "normalized_score = %f\n", norm_score );
-
-  printf( "Whiskers: %s\n", outcome.used_whiskers.str().c_str() );
+  
 
   return 0;
 }
+
