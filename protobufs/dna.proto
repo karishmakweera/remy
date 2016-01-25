@@ -20,7 +20,7 @@ message MemoryRange {
 }
 
 message Memory {
-  optional double rec_rec_ewma = 22;
+  optional double queueing_delay = 25;
 }
 
 message Whisker {
@@ -76,3 +76,5 @@ message NetConfig {
 message ConfigVector {
   repeated NetConfig config = 81;
 }
+
+ 

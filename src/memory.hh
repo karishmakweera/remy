@@ -12,43 +12,43 @@ public:
   typedef double DataType;
 
 private:
-  DataType _rtt_ratio;
+  DataType _queueing_delay;
   
   double _last_tick_sent;
   double _last_tick_received;
-  double _min_rtt;
+  double _rec_ewma;
 
 public:
   Memory( const std::vector< DataType > & s_data )
-    : _rtt_ratio( s_data.at( 1 ) ),
+    : _queueing_delay( s_data.at( 0 ) ),
       _last_tick_sent( 0 ),
       _last_tick_received( 0 ),
-      _min_rtt( 0 )
+      _rec_ewma( 0 )
   {}
 
   Memory()
-    : _rtt_ratio( 0.0 ),
+    : _queueing_delay( 0.0 ),
       _last_tick_sent( 0 ),
       _last_tick_received( 0 ),
-      _min_rtt( 0 )
+      _rec_ewma( 0 )
   {}
 
-  void reset( void ) { _rtt_ratio = _last_tick_sent = _last_tick_received = _min_rtt = 0; }
+  void reset( void ) { _queueing_delay = _last_tick_sent = _last_tick_received = _rec_ewma = 0; }
 
   static const unsigned int datasize = 1;
 
-  const DataType & field( unsigned int num ) const { return num == 0 ? _rtt_ratio : _rtt_ratio ; }
-  DataType & mutable_field( unsigned int num )     { return num == 0 ? _rtt_ratio : _rtt_ratio ;  }
+  const DataType & field( unsigned int num ) const { return num == 0 ? _queueing_delay : _queueing_delay ; }
+  DataType & mutable_field( unsigned int num )     { return num == 0 ? _queueing_delay : _queueing_delay ;  }
 
   void packet_sent( const Packet & packet __attribute((unused)) ) {}
-  void packets_received( const std::vector< Packet > & packets, const unsigned int flow_id );
+  void packets_received( const std::vector< Packet > & packets, const unsigned int flow_id, const int largest_ack );
   void advance_to( const unsigned int tickno __attribute((unused)) ) {}
 
   std::string str( void ) const;
 
-  bool operator>=( const Memory & other ) const { return (_rtt_ratio >= other._rtt_ratio) ; }
-  bool operator<( const Memory & other ) const { return (_rtt_ratio < other._rtt_ratio) ; }
-  bool operator==( const Memory & other ) const { return (_rtt_ratio == other._rtt_ratio) ; }
+  bool operator>=( const Memory & other ) const { return (_queueing_delay >= other._queueing_delay) ; }
+  bool operator<( const Memory & other ) const { return (_queueing_delay < other._queueing_delay) ; }
+  bool operator==( const Memory & other ) const { return (_queueing_delay == other._queueing_delay) ; }
 
   RemyBuffers::Memory DNA( void ) const;
   Memory( const bool is_lower_limit, const RemyBuffers::Memory & dna );

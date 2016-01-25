@@ -107,7 +107,7 @@ public:
     static OptimizationSettings default_settings {
       { 0,    256, 1,    32,  4, 1 }, /* window increment */
       { 0,    1,   0.01, 0.5, 4, 1 }, /* window multiple */
-      { 0.25, 3,   0.05, 1,   4, 3 } /* intersend */
+      { 0.00667, 30,   0.00667, 30,   4, 15 } /* intersend */
     };
     return default_settings;
   }
