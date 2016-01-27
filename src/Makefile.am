@@ -20,6 +20,8 @@ remy_SOURCES = $(common_source) remy.cc ratbreeder.cc ratbreeder.hh
 
 rat_runner_SOURCES = $(common_source) rat-runner.cc
 
+rat_plotter_SOURCES = $(common_source) rat-plotter.cc
+
 scoring_example_SOURCES = $(common_source) scoring-example.cc
 
 configuration_SOURCES = input-configrange.cc
