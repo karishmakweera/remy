@@ -13,7 +13,9 @@ class SenderGang
 private:
   class SwitchedSender {
   private:
+    const static int EXPORT_INTERVAL = 25;
     double internal_tick;
+    double _last_tickno = 0;
 
   protected:
     double next_switch_tick;
@@ -32,6 +34,8 @@ private:
 
     void receive_feedback( Receiver & rec );
 
+    void export_signal( const double & tickno );
+
   public:
     double next_event_time( const double & tickno ) const;
     Utility utility;
@@ -44,7 +48,7 @@ private:
       : internal_tick( 0 ),
 	next_switch_tick( start_tick ),
 	sender( s_sender ),
-	utility(),
+  utility(),
 	sending( false ),
 	id( s_id )
     {}

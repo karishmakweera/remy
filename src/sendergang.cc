@@ -161,6 +161,17 @@ void SenderGang<SenderType>::SwitchedSender::receive_feedback( Receiver & rec )
 }
 
 template <class SenderType>
+void SenderGang<SenderType>::SwitchedSender::export_signal( const double & tickno )
+{
+  if (tickno - _last_tickno < EXPORT_INTERVAL) {
+    return;
+  }
+  fprintf(stderr, "%d %f %f\n", id, tickno, sender.get_signal(1));
+  _last_tickno = tickno;
+}
+
+
+template <class SenderType>
 template <class NextHop>
 void SenderGang<SenderType>::TimeSwitchedSender::tick( NextHop & next, Receiver & rec,
 						       const double & tickno,
@@ -168,6 +179,7 @@ void SenderGang<SenderType>::TimeSwitchedSender::tick( NextHop & next, Receiver 
 						       Exponential & start_distribution __attribute((unused)) )
 {
   SwitchedSender::receive_feedback( rec );
+  SwitchedSender::export_signal( tickno );
 
   /* possibly send packets */
   if ( SwitchedSender::sending ) {
@@ -184,6 +196,7 @@ void SenderGang<SenderType>::ByteSwitchedSender::tick( NextHop & next, Receiver 
 						       Exponential & start_distribution )
 {
   SwitchedSender::receive_feedback( rec );
+  SwitchedSender::export_signal( tickno );
 
   /* possibly send packets */
   if ( SwitchedSender::sending ) {

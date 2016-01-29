@@ -44,6 +44,8 @@ public:
   double next_event_time( const double & tickno ) const;
 
   const int & packets_sent( void ) const { return _packets_sent; }
+
+  const double & get_signal ( const int i ) const { return _memory.field(i); }
 };
 
 #endif
