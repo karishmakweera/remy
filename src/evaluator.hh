@@ -33,7 +33,7 @@ private:
   std::vector< NetConfig > _configs;
 
 public:
-  Evaluator( const ConfigRange & range );
+  Evaluator( const ConfigRange & range, const int export_signal = -1 );
   
   ProblemBuffers::Problem DNA( const WhiskerTree & whiskers ) const;
 

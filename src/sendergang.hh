@@ -13,7 +13,7 @@ class SenderGang
 private:
   class SwitchedSender {
   private:
-    const static int EXPORT_INTERVAL = 25;
+    const static int EXPORT_INTERVAL = 50;
     double internal_tick;
     double _last_tickno = 0;
 
@@ -34,7 +34,7 @@ private:
 
     void receive_feedback( Receiver & rec );
 
-    void export_signal( const double & tickno );
+    void export_signal( const double & tickno, const int signal_index );
 
   public:
     double next_event_time( const double & tickno ) const;
@@ -48,7 +48,7 @@ private:
       : internal_tick( 0 ),
 	next_switch_tick( start_tick ),
 	sender( s_sender ),
-  utility(),
+        utility(),
 	sending( false ),
 	id( s_id )
     {}
@@ -61,7 +61,8 @@ private:
     void tick( NextHop & next, Receiver & rec,
 	       const double & tickno,
 	       const unsigned int num_sending,
-	       Exponential & start_distribution );
+	       Exponential & start_distribution,
+               const int signal_index );
 
     void switcher( const double & tickno,
 		   Exponential & start_distribution,
@@ -80,7 +81,8 @@ private:
     void tick( NextHop & next, Receiver & rec,
 	       const double & tickno,
 	       const unsigned int num_sending,
-	       Exponential & start_distribution );
+	       Exponential & start_distribution,
+               const int signal_index );
 
     void switcher( const double & tickno,
 		   Exponential & start_distribution,
@@ -94,12 +96,15 @@ private:
 
   Exponential _start_distribution, _stop_distribution;
 
+  int _signal_index;
+
 public:
   SenderGang( const double mean_on_duration,
 	      const double mean_off_duration,
 	      const unsigned int num_senders,
 	      const SenderType & exemplar,
 	      PRNG & s_prng,
+              const int export_signal = -1,
 	      const unsigned int id_range_begin = 0 );
 
   /* Create empty SenderGang */

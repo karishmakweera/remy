@@ -33,8 +33,9 @@ int main( int argc, char *argv[] )
   double mean_on_duration = 1000.0;
   double mean_off_duration = 1000.0;
   int num_points = 100; /* Granularity of the generated plot */
-  ofstream plot;
+  int signal_index = -1; /* Whether we want to sample signal at given index */
   bool linkspeed = false;
+  ofstream plot;
 
   for ( int i = 1; i < argc; i++ ) {
     string arg( argv[ i ] );
@@ -83,6 +84,8 @@ int main( int argc, char *argv[] )
     } else if ( arg.substr( 0, 6 ) == "granu=") {
       num_points = atof( arg.substr( 6 ).c_str() );
       fprintf( stderr, "Setting granularity to %d points\n", num_points );
+    } else if ( arg.substr( 0, 7 ) == "export=") {
+      signal_index = atof( arg.substr( 7 ).c_str() );
     } else if ( arg.substr( 0, 10 ) == "linkspeed=") {
       string filename( arg.substr( 10 ) );
       plot.open(filename);
@@ -103,7 +106,7 @@ int main( int argc, char *argv[] )
     double step = pow(10, 3.0 / (num_points - 1));
     for (int i = 0; i < num_points; i ++) {
       configuration_range.link_ppt = Range( link_ppt,link_ppt, 0 );
-      Evaluator eval( configuration_range );
+      Evaluator eval( configuration_range, signal_index );
       auto outcome = eval.score( whiskers, false, 10 );
       double norm_score = parse_outcome(outcome);
       plot << to_string(link_ppt * 10) + " ";
@@ -111,9 +114,12 @@ int main( int argc, char *argv[] )
       link_ppt *= step;
     }
     plot.close();
+  } else {
+    Evaluator eval( configuration_range, signal_index );
+    auto outcome = eval.score( whiskers, false, 10 );
+    parse_outcome(outcome);  
   }
   
-
   return 0;
 }
 

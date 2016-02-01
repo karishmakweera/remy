@@ -18,6 +18,7 @@ public:
   double link_ppt;
   double delay;
   double buffer_size;
+  int export_signal;
 
   NetConfig( void )
     : mean_on_duration( 5000.0 ),
@@ -25,7 +26,8 @@ public:
       num_senders( 8 ),
       link_ppt( 1.0 ),
       delay( 150 ),
-      buffer_size( std::numeric_limits<unsigned int>::max() )
+      buffer_size( std::numeric_limits<unsigned int>::max() ),
+      export_signal( -1 )
   {}
 
   NetConfig( const RemyBuffers::NetConfig & dna )
@@ -34,7 +36,8 @@ public:
       num_senders( dna.num_senders() ),
       link_ppt( dna.link_ppt() ),
       delay( dna.delay() ),
-      buffer_size( dna.buffer_size() )
+      buffer_size( dna.buffer_size() ),
+      export_signal( -1 )
   {}
   
   NetConfig & set_link_ppt( const double s_link_ppt ) { link_ppt = s_link_ppt; return *this; }
@@ -43,7 +46,8 @@ public:
   NetConfig & set_on_duration( const double & duration ) { mean_on_duration = duration; return *this; }
   NetConfig & set_off_duration( const double & duration ) { mean_off_duration = duration; return *this; }
   NetConfig & set_buffer_size( const unsigned int n ) { buffer_size = n; return *this; }
-
+  NetConfig & set_export_signal( const int n ) { export_signal = n; return *this; }
+ 
   RemyBuffers::NetConfig DNA( void ) const
   {
       RemyBuffers::NetConfig ret;
@@ -53,6 +57,7 @@ public:
       ret.set_delay( delay );
       ret.set_link_ppt( link_ppt );
       ret.set_buffer_size( buffer_size );
+      ret.set_export_signal( export_signal );
       return ret;
   }
 

@@ -74,6 +74,7 @@ message NetConfig {
   optional double link_ppt = 4;
   optional double delay = 5;
   optional uint32 buffer_size = 6;
+  optional sint32 export_signal = 7;
 }
 
 message ConfigVector {
