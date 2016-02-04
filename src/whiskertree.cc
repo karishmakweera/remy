@@ -1,6 +1,7 @@
 #include <cassert>
 #include <cmath>
 #include <algorithm>
+#include <functional>
 
 #include "whiskertree.hh"
 
@@ -213,6 +214,11 @@ string WhiskerTree::str( const unsigned int total ) const
   }
 
   return ret;
+}
+
+size_t WhiskerTree::hash( void ) const {
+  std::hash<string> hash_fn;
+  return hash_fn(str()); 
 }
 
 unsigned int WhiskerTree::num_children( void ) const

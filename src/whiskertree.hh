@@ -36,6 +36,7 @@ public:
 
   std::string str( void ) const;
   std::string str( const unsigned int total ) const;
+  size_t hash( void ) const;
   unsigned int total_whisker_queries( void ) const;
 
   unsigned int num_children( void ) const;

@@ -2,6 +2,7 @@
 #define NETWORK_HH
 
 #include <string>
+#include <functional>
 
 #include "sendergangofgangs.hh"
 #include "link.hh"
@@ -63,6 +64,11 @@ public:
 	     mean_on_duration, mean_off_duration, num_senders, link_ppt, delay, buffer_size );
     return tmp;
   }
+
+  size_t hash( void ) const {
+    std::hash<std::string> hash_fn;
+    return hash_fn(str()); 
+  }
 };
 
 template <class SenderType1, class SenderType2>
@@ -74,10 +80,13 @@ private:
   Link _link;
   Delay _delay;
   Receiver _rec;
+  std::string _id;
 
   double _tickno;
 
   void tick( void );
+
+  void export_score(std::string fname, double last_tick, double duration, bool final_score=false);
 
 public:
   Network( const SenderType1 & example_sender1, const SenderType2 & example_sender2, PRNG & s_prng, const NetConfig & config );
