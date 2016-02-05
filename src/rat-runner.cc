@@ -20,8 +20,6 @@ int main( int argc, char *argv[] )
   double mean_on_duration = 5000.0;
   double mean_off_duration = 5000.0;
   double buffer_size = numeric_limits<unsigned int>::max();
-  ofstream linkspeed_out;
-  bool gen_linkspeed = false;
 
   for ( int i = 1; i < argc; i++ ) {
     string arg( argv[ i ] );
