@@ -123,7 +123,11 @@ int main( int argc, char *argv[] )
   configuration_range.num_senders = Range( num_senders, num_senders, 0 );
   configuration_range.mean_on_duration = Range( mean_on_duration, mean_on_duration, 0 );
   configuration_range.mean_off_duration = Range( mean_off_duration, mean_off_duration, 0 );
-  configuration_range.buffer_size = Range( buffer_size, buffer_size, 0 );
+  if ( buffer_size == numeric_limits<unsigned int>::max() ) {  
+    configuration_range.buffer_size = Range( buffer_size, buffer_size, 0 );
+  } else {
+    configuration_range.buffer_size = Range( buffer_size * link_ppt * delay, buffer_size * link_ppt * delay, 0 );
+  }
   configuration_range.simulation_ticks = simulation_ticks;
 
   if ( is_poisson ) {
